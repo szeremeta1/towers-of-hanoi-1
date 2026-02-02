@@ -86,8 +86,6 @@ public class HanoiGUI {
     }
     
     public void initializeGame() {
-        // TODO: Initialize the peg arrays
-        
         // Reset all pegs to empty (0 means no disk)
         for (int i = 0; i < game.numDisks; i++) {
             pegA[i] = 0;
@@ -95,8 +93,11 @@ public class HanoiGUI {
             pegC[i] = 0;
         }
         
-        // TODO: Fill pegA with the disk values
-        
+        // Fill pegA with the disk values (largest disk at bottom, smallest at top)
+        // Disk sizes go from NUM_DISKS (largest) at index 0 to 1 (smallest) at top
+        for (int i = 0; i < game.numDisks; i++) {
+            pegA[i] = game.numDisks - i;
+        }
     }
 
     public void drawGame(Graphics g) {
@@ -115,17 +116,73 @@ public class HanoiGUI {
     }
     
     public void drawBase(Graphics g, int width, int height) {
-        // TODO: Use g.setColor() and g.fillRect() to draw the base
-        
+        // Draw the base platform
+        g.setColor(new Color(139, 69, 19)); // Brown color
+        int baseHeight = 20;
+        int baseY = height - 50;
+        g.fillRect(50, baseY, width - 100, baseHeight);
     }
     
     public void drawPegs(Graphics g, int width, int height) {
-        // TODO: Draw three pegs evenly spaced across the panel
+        // Draw three pegs evenly spaced across the panel
+        g.setColor(new Color(139, 69, 19)); // Brown color for pegs
+        
+        int pegWidth = 10;
+        int pegHeight = height / 2;
+        int baseY = height - 50; // Position above the base
+        
+        // Peg A at 1/4 of width
+        int pegAX = width / 4 - pegWidth / 2;
+        g.fillRect(pegAX, baseY - pegHeight, pegWidth, pegHeight);
+        
+        // Peg B at 1/2 of width (center)
+        int pegBX = width / 2 - pegWidth / 2;
+        g.fillRect(pegBX, baseY - pegHeight, pegWidth, pegHeight);
+        
+        // Peg C at 3/4 of width
+        int pegCX = 3 * width / 4 - pegWidth / 2;
+        g.fillRect(pegCX, baseY - pegHeight, pegWidth, pegHeight);
     }
 
     public void drawDisksOnPeg(Graphics g, int[] peg, int pegPosition, int width, int height) {
-        // TODO: Loop through the disks on this peg and draw each one
+        // Calculate the x position of the peg center
+        int pegCenterX;
+        if (pegPosition == 1) {
+            pegCenterX = width / 4;
+        } else if (pegPosition == 2) {
+            pegCenterX = width / 2;
+        } else {
+            pegCenterX = 3 * width / 4;
+        }
         
+        int baseY = height - 50; // Base position
+        int diskHeight = 20;
+        int maxDiskWidth = width / 5; // Maximum disk width
+        
+        // Loop through the disks on this peg and draw each one
+        for (int i = 0; i < peg.length; i++) {
+            int diskSize = peg[i];
+            if (diskSize > 0) {
+                // Calculate disk width based on size (larger number = wider disk)
+                int diskWidth = (diskSize * maxDiskWidth) / game.numDisks;
+                
+                // Calculate disk position (bottom disk at index 0)
+                int diskX = pegCenterX - diskWidth / 2;
+                int diskY = baseY - (i + 1) * diskHeight;
+                
+                // Set color based on disk size (different colors for each disk)
+                Color[] colors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, 
+                                  Color.MAGENTA, Color.CYAN, Color.PINK};
+                g.setColor(colors[diskSize % colors.length]);
+                
+                // Draw the disk
+                g.fillRect(diskX, diskY, diskWidth, diskHeight - 2);
+                
+                // Draw border
+                g.setColor(Color.BLACK);
+                g.drawRect(diskX, diskY, diskWidth, diskHeight - 2);
+            }
+        }
     }
     
     public void drawDisk(Graphics g, int diskSize, int x, int y) {
