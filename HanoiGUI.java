@@ -287,11 +287,6 @@ public class HanoiGUI {
             }
         }
     }
-    
-    public void drawDisk(Graphics g, int diskSize, int x, int y) {
-        // TODO: Calculate the width based on diskSize
-        
-    }
 
     public void solveButtonClicked() {
         // Stop any existing solve animation
@@ -355,9 +350,6 @@ public class HanoiGUI {
     
 
 
-    /**
-     * Returns the top (smallest) disk value on a peg, or 0 if the peg is empty.
-     */
     public int getTopDisk(int[] peg) {
         for (int i = peg.length - 1; i >= 0; i--) {
             if (peg[i] > 0) return peg[i];
@@ -365,9 +357,6 @@ public class HanoiGUI {
         return 0;
     }
     
-    /**
-     * Returns the index of the top disk, or -1 if empty.
-     */
     private int getTopIndex(int[] peg) {
         for (int i = peg.length - 1; i >= 0; i--) {
             if (peg[i] > 0) return i;
@@ -375,10 +364,6 @@ public class HanoiGUI {
         return -1;
     }
     
-    /**
-     * Attempts to move the top disk from fromPeg to toPeg.
-     * Returns true if the move was successful, false if illegal.
-     */
     public boolean moveDisk(char fromPeg, char toPeg) {
         int[] fromArray = getPegArray(fromPeg);
         int[] toArray = getPegArray(toPeg);
@@ -411,7 +396,6 @@ public class HanoiGUI {
             return false;
         }
         
-        // Perform the move
         fromArray[fromIndex] = 0;
         toArray[toIndex] = diskToMove;
         moveCount++;
@@ -420,9 +404,6 @@ public class HanoiGUI {
         return true;
     }
     
-    /**
-     * Checks if all disks are on peg C (win condition).
-     */
     public void checkWin() {
         for (int i = 0; i < game.numDisks; i++) {
             if (pegC[i] != game.numDisks - i) return;
