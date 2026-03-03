@@ -3,26 +3,23 @@ public class HanoiGame {
     public char sourcePeg;
     public char targetPeg;
     public char auxiliaryPeg;
+    public HanoiSolver solver;
 
     public HanoiGame(int numDisks) {
         this.numDisks = numDisks;
         this.sourcePeg = 'A';
         this.targetPeg = 'C';
         this.auxiliaryPeg = 'B';
+        this.solver = new HanoiSolver(numDisks);
     }
 
     public void solve() {
-        moveDisks(numDisks, sourcePeg, targetPeg, auxiliaryPeg);
-    }
-
-    public void moveDisks(int n, char fromPeg, char toPeg, char auxPeg) {
-        if (n == 1) {
-            System.out.println("Move disk 1 from peg " + fromPeg + " to peg " + toPeg);
-            return;
+        // Print all moves from the solver
+        solver.reset();
+        while (solver.hasNextMove()) {
+            HanoiSolver.Move move = solver.getNextMove();
+            System.out.println(move);
         }
-        moveDisks(n - 1, fromPeg, auxPeg, toPeg);
-        System.out.println("Move disk " + n + " from peg " + fromPeg + " to peg " + toPeg);
-        moveDisks(n - 1, auxPeg, toPeg, fromPeg);
     }
 
     public static void main(String[] args) {
